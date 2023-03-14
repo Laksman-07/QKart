@@ -55,15 +55,15 @@ const Register = () => {
       api,
       postData
     ).then(function (response) {
-      enqueueSnackbar("Registered successfully");
+      enqueueSnackbar("Registered successfully",{variant:"success"});
     })
     .catch(function (error) {
-      enqueueSnackbar(error.response.data.message);
+      enqueueSnackbar(error.response.data.message,{variant:"error"});
     });
     setData((prev) => ({ ...prev, isLoading:false }))
   }
   catch(e){
-    enqueueSnackbar("Something went wrong. Check that the backend is running, reachable and returns valid JSON.");
+    enqueueSnackbar("Something went wrong. Check that the backend is running, reachable and returns valid JSON.",{variant:"error"});
   }
 }
     //console.log(res);
@@ -91,23 +91,23 @@ const Register = () => {
   const validateInput = (data) => {
     const{name,password,confirmpass}=data;
     if(!name){
-      enqueueSnackbar("Username is a required field");
+      enqueueSnackbar("Username is a required field",{variant:"warning"});
       return false;
     }
     else if(name.length<6){
-      enqueueSnackbar("Username must be at least 6 characters");
+      enqueueSnackbar("Username must be at least 6 characters",{variant:"warning"});
       return false
     }
     if(!password){
-      enqueueSnackbar("Password is a required field");
+      enqueueSnackbar("Password is a required field",{variant:"warning"});
       return false
     }
     else if(password.length<6){
-      enqueueSnackbar("Password must be at least 6 characters");
+      enqueueSnackbar("Password must be at least 6 characters",{variant:"warning"});
       return false
     }
     if(password!==confirmpass){
-      enqueueSnackbar("Passwords do not match");
+      enqueueSnackbar("Passwords do not match",{variant:"warning"});
       return false
     }
     return true;
