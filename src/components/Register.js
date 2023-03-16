@@ -1,4 +1,5 @@
 import { Button, CircularProgress, Stack, TextField } from "@mui/material";
+import { useHistory, Link } from "react-router-dom";
 import { Box } from "@mui/system";
 import axios from "axios";
 import { useSnackbar } from "notistack";
@@ -10,6 +11,7 @@ import "./Register.css";
 
 const Register = () => {
   const { enqueueSnackbar } = useSnackbar();
+  const history=useHistory();
   const [data,setData]=useState({
     name:"",
     password:"",
@@ -18,6 +20,8 @@ const Register = () => {
   });
 
   // TODO: CRIO_TASK_MODULE_REGISTER - Implement the register function
+
+
   /**
    * Definition for register handler
    * - Function to be called when the user clicks on the register button or submits the register form
@@ -40,7 +44,8 @@ const Register = () => {
    *      "message": "Username is already taken"
    * }
    */
-  const register = async (formData) => {
+
+   const register = async(formData)=>{
     if(validateInput(formData)){
     setData((prev) => ({ ...prev, isLoading:true }))
     let api=config.endpoint+"/auth/register";
@@ -51,11 +56,12 @@ const Register = () => {
     };
     console.log(postData)
     try{
-      let res = await axios.post(
+      await axios.post(
       api,
       postData
     ).then(function (response) {
       enqueueSnackbar("Registered successfully",{variant:"success"});
+      history.push("/login");
     })
     .catch(function (error) {
       enqueueSnackbar(error.response.data.message,{variant:"error"});
@@ -120,9 +126,9 @@ const Register = () => {
       justifyContent="space-between"
       minHeight="100vh"
     >
-      <Header hasHiddenAuthButtons />
+      <Header hasHiddenAuthButtons={true} />
       <Box className="content">
-        <Stack spacing={2} className="form ">
+        <Stack spacing={2} className="form">
           <h2 className="title">Register</h2>
           <TextField
             id="username"
@@ -160,16 +166,16 @@ const Register = () => {
               setData((prev) => ({ ...prev, confirmpass: e.target.value }))
             }
           />
-         {data.isLoading? <Box textAlign="center"><CircularProgress /> </Box>:
-           <Button className="button" variant="contained" onClick={()=>register(data)}>
+         {data.isLoading? (<Box textAlign="center"><CircularProgress /> </Box>):
+           (<Button className="button" variant="contained" onClick={()=>register(data)}>
             Register Now
-           </Button>}
+           </Button>)}
           
           <p className="secondary-action">
             Already have an account?{" "}
-             <a className="link" href="#">
+             <Link className="link"to="/login">
               Login here
-             </a>
+             </Link>
           </p>
         </Stack>
       </Box>
