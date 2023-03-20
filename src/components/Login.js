@@ -53,7 +53,7 @@ const Login = () => {
         username: name,
         password
       };
-      console.log(postData)
+      // console.log(postData)
       try{
         await axios.post(
         api,

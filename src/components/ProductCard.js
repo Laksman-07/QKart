@@ -11,7 +11,8 @@ import {
 import React from "react";
 import "./ProductCard.css";
 
-const ProductCard = ({ product, handleAddToCart }) => {
+const ProductCard = ({ product, handleAddToCart, items, products }) => {
+  let token=localStorage.getItem("token");
   return (
     <Card className="card" >
        
@@ -32,7 +33,7 @@ const ProductCard = ({ product, handleAddToCart }) => {
         </CardContent>
       
       <CardActions>
-        <Button className="button" variant="contained" startIcon={<AddShoppingCartOutlined/>} sx={{width:"100%"}}>
+        <Button className="button" variant="contained" startIcon={<AddShoppingCartOutlined/>} onClick={()=>handleAddToCart(token,items,products,product._id,1, {preventDuplicate: true} )} sx={{width:"100%"}}>
           add to cart
         </Button>
       </CardActions>
