@@ -58,7 +58,7 @@ export const generateCartItemsFrom = (cartData, products) => {
       }
     }
   } 
-  console.log(generatedItems)
+  // console.log(generatedItems)
   return generatedItems;
 };
 
@@ -80,7 +80,20 @@ export const getTotalCartValue = (items = []) => {
   return value;
 };
 
-
+// TODO: CRIO_TASK_MODULE_CHECKOUT - Implement function to return total cart quantity
+/**
+ * Return the sum of quantities of all products added to the cart
+ *
+ * @param { Array.<CartItem> } items
+ *    Array of objects with complete data on products in cart
+ *
+ * @returns { Number }
+ *    Total quantity of products added to the cart
+ *
+ */
+ export const getTotalItems = (items = []) => {
+  return items.reduce((n, {qty}) => qty + n, 0)
+};
 /**
  * Component to display the current quantity for a product and + and - buttons to update product quantity on cart
  * 
@@ -98,7 +111,7 @@ export const getTotalCartValue = (items = []) => {
 const ItemQuantity = ({
   value,
   handleAdd,
-  handleDelete,
+  handleDelete
 }) => {
   return (
     <Stack direction="row" alignItems="center">
@@ -133,6 +146,7 @@ const Cart = ({
   products,
   items = [],
   handleQuantity,
+  isReadOnly=false
 }) => {
   let history=useHistory();
   if (!items.length) {
@@ -148,10 +162,12 @@ const Cart = ({
 
   return (
     <>
-      <Box className="cart">
+    
+    <Box className="cart">
         {/* TODO: CRIO_TASK_MODULE_CART - Display view for each cart item with non-zero quantity */}
-  {items.map((data,index) =>      
-<Box display="flex" alignItems="flex-start" padding="1rem">
+    {items.map((data,index) =>      
+  
+  <Box display="flex" alignItems="flex-start" padding="1rem">
     <Box className="image-container">
         <img
             // Add product image
@@ -170,12 +186,19 @@ const Cart = ({
         paddingX="1rem"
     >
         <div>{data.name}</div>
+        
         <Box
             display="flex"
             justifyContent="space-between"
             alignItems="center"
         >
+        {isReadOnly?
+        <Box>
+          Qty:{data.qty}
+        </Box>
+        :
         <ItemQuantity
+
         // Add required props by checking implementation
         value={data.qty}
         handleAdd={()=>
@@ -196,10 +219,13 @@ const Cart = ({
             data.qty-1
     )
         }
+
         />
+      }
         <Box padding="0.5rem" fontWeight="700">
             ${data.cost}
         </Box>
+
         </Box>
     </Box>
 </Box>)}
@@ -222,7 +248,7 @@ const Cart = ({
             ${getTotalCartValue(items)}
           </Box>
         </Box>
-
+{!isReadOnly &&
         <Box display="flex" justifyContent="flex-end" className="cart-footer">
           <Button
             color="primary"
@@ -234,8 +260,10 @@ const Cart = ({
             Checkout
           </Button>
         </Box>
+}
       </Box>
     </>
+      
   );
 };
 
